@@ -10,3 +10,8 @@ anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
+oxc_ast = "0.52.0"
+oxc_parser = "0.52.0"
+oxc_semantic = "0.52.0"
+oxc_allocator = "0.52.0"
+oxc_span = "0.52.0"
