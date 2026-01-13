@@ -52,3 +52,10 @@ cargo test
 
 ## License
 MIT
+
+---
+
+### Learning Rust? 🦀
+Moving from a TypeScript background? We've got you covered:
+- **[TS to Rust Anecdotes & Comparisons](docs/ts_to_rust_anecdotes.md)**: Conceptual comparisons and relatable anecdotes.
+- **[Technical Rust Concepts Guide](docs/rust_concepts.md)**: Deep dive into Ownership, Lifetimes, and more.

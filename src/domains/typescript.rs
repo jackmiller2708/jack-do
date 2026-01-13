@@ -118,6 +118,7 @@ impl<'a> UnusedDeclarationAnalyzer<'a> {
 
         while let Some(current_id) = current_node_id {
             let node = semantic.nodes().get_node(current_id);
+
             match node.kind() {
                 AstKind::ExportNamedDeclaration(_)
                 | AstKind::ExportDefaultDeclaration(_)
@@ -126,6 +127,7 @@ impl<'a> UnusedDeclarationAnalyzer<'a> {
             }
             current_node_id = semantic.nodes().parent_id(current_id);
         }
+
         false
     }
 
