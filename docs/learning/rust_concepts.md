@@ -1,6 +1,6 @@
 # My Rust Learning Notes: Concepts in Jack-Do
 
-> [!IMPORTANT]
+> [!IMPORTANT] 
 > **Personal Learning Notes**: This document contains my personal findings and "Aha!" moments while learning Rust. It is not an official Rust guide or standard learning material. For official documentation, please visit [doc.rust-lang.org](https://doc.rust-lang.org).
 
 These are the notes I've taken while building `jack-do`. Coming from TypeScript, some of these concepts felt like obstacles at first, but now I see them as the features that make my CLI fast and safe.
@@ -79,7 +79,8 @@ This is the mental checklist I use when deciding between a reference (`&T`) and 
 - **Small "Copyable" Types**: Primitives like `i32` or `bool`. They are so small that Rust copies them automatically—no "Move" needed.
 - **Final Destination**: Like my `apply_modifications_to_file` function, once the data reaches its final step, moving it makes the cleanup automatic.
 
-> [!TIP] > **Mutation Discovery**
+> [!TIP]  
+> **Mutation Discovery**
 > When I need to _change_ data, I use a **Mutable Borrow** (`&mut T`).
 > The "Exactly one writer OR many readers" rule was a bit of a shock, but it's why I don't have to worry about weird state bugs or data races.
 
