@@ -5,7 +5,7 @@
 
 Building `jack-do` as my first real Rust project has been quite an adventure. Coming from a TypeScript background, I had to unlearn a few things and embrace new ways of thinking. These are the anecdotes and comparisons that helped me finally "get" Rust.
 
-For a deeper technical dive into my notes, see my [Technical Rust Learning Guide](rust_concepts.md).
+For a deeper technical dive into my notes, see my [Technical Rust Learning Guide](rust_concepts.md) or my [Why Rust?](ts_vs_rust_why.md).
 
 ## 1. Ownership: The Library Book vs. The Photocopy
 
@@ -105,7 +105,12 @@ Coming from TS, the Rust compiler felt like a brick wall at first. But then I re
 
 The compiler checks for memory leaks, null pointers, and data races before I even get an executable. It's like having a senior developer reviewing every single line of my code in real-time. Even when it yells at me about Borrowing or Lifetimes, it's usually pointing out a bug I would have spent days chasing in TypeScript.
 
-## My Reflection
-Moving to Rust isn't just about a different syntax; it's about learning a more **disciplined** way of thinking. In TypeScript, I felt like the computer was trying to guess what I meant. In Rust, I tell the computer *exactly* what I want, and it guarantees I'll get it safely. 
+## If I Could Ever Start Over
+
+Moving to Rust isn't just about a different syntax; it's about learning a more **disciplined** way of thinking. In TypeScript, I felt like I was constantly playing a guessing game—guessing how the code would get executed, where mutation-related errors might hide, or when an object would suddenly be `undefined`. In Rust, I tell the computer *exactly* what I want, and it guarantees I'll get it safely. 
+
+**My Take**: Starting out with JavaScript was great for getting things done quickly, but if I had the chance to relearn programming from scratch today, **I would choose Rust as my first language.** 
+
+Why? Because Rust forces you to understand the actual nature of a program—how memory works, how data flows, and why safety matters. It shapes your mindset to be more robust and makes your entire thought process more explicit. Now, I've realized I would never go back to plain JavaScript because of its ambiguity. If I use TypeScript, I only use the **Effect library** as the foundation, as its principles are the closest to Rust's—making the code safe and enjoyable.
 
 This project is a record of those lessons. I hope my notes help you too!

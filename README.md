@@ -72,3 +72,4 @@ Deep dive into how the tool is built:
 Moving from a TypeScript background? I've got you covered:
 - **[My TypeScript to Rust Journey](docs/learning/ts_to_rust_anecdotes.md)**: Conceptual comparisons and relatable anecdotes.
 - **[My Rust Learning Notes: Concepts in Jack-Do](docs/learning/rust_concepts.md)**: Deep dive into Ownership, Lifetimes, and more.
+- **[Why Rust?](docs/learning/ts_vs_rust_why.md)**: Why Rust is better for high-performance applications.
