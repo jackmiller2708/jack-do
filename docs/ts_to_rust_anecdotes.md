@@ -1,4 +1,4 @@
-# My TypeScript to Rust Journey: "Aha!" Moments & Lessons 🐦🦀
+# My TypeScript to Rust Journey
 
 Building `jack-do` as my first real Rust project has been quite an adventure. Coming from a TypeScript background, I had to unlearn a few things and embrace new ways of thinking. These are the anecdotes and comparisons that helped me finally "get" Rust.
 

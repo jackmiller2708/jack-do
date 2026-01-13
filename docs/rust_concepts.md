@@ -1,4 +1,4 @@
-# My Rust Learning Notes: Concepts in Jack-Do 🦀
+# My Rust Learning Notes: Concepts in Jack-Do
 
 These are the notes I've taken while building `jack-do`. Coming from TypeScript, some of these concepts felt like obstacles at first, but now I see them as the features that make my CLI fast and safe.
 

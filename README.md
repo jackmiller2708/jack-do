@@ -59,6 +59,12 @@ MIT
 
 ---
 
+### Design & Internal Architecture 🏗️
+Deep dive into how the tool is built:
+- **[Design Abstraction](docs/design_abstraction.md)**: High-level patterns.
+- **[Technical Specifications](docs/technical_specs.md)**: Dependencies and engine mechanics.
+- **[Thought Process](docs/thought_process.md)**: Why I made these choices.
+
 ### Learning Rust? 🦀
 Moving from a TypeScript background? I've got you covered:
 - **[TS to Rust Anecdotes & Comparisons](docs/ts_to_rust_anecdotes.md)**: Conceptual comparisons and relatable anecdotes.
