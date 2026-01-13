@@ -1,5 +1,8 @@
 # My Rust Learning Notes: Concepts in Jack-Do
 
+> [!IMPORTANT]
+> **Personal Learning Notes**: This document contains my personal findings and "Aha!" moments while learning Rust. It is not an official Rust guide or standard learning material. For official documentation, please visit [doc.rust-lang.org](https://doc.rust-lang.org).
+
 These are the notes I've taken while building `jack-do`. Coming from TypeScript, some of these concepts felt like obstacles at first, but now I see them as the features that make my CLI fast and safe.
 
 ## 1. Ownership and Borrowing: The Biggest "Aha!" Moment

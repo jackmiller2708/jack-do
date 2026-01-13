@@ -61,11 +61,14 @@ MIT
 
 ### Design & Internal Architecture
 Deep dive into how the tool is built:
-- **[Design Abstraction](docs/design_abstraction.md)**: High-level patterns.
-- **[Technical Specifications](docs/technical_specs.md)**: Dependencies and engine mechanics.
-- **[Thought Process](docs/thought_process.md)**: Why I made these choices.
+- **[Design Abstraction](docs/architecture/design_abstraction.md)**: High-level patterns.
+- **[Technical Specifications](docs/architecture/technical_specs.md)**: Dependencies and engine mechanics.
+- **[Thought Process](docs/architecture/thought_process.md)**: Why I made these choices.
 
 ### Learning Rust?
+> [!IMPORTANT]
+> **Personal Learning Notes**: The documents below contain my personal findings while learning Rust. It is not an official Rust guide or standard learning material. For official documentation, please visit [doc.rust-lang.org](https://doc.rust-lang.org).
+
 Moving from a TypeScript background? I've got you covered:
-- **[TS to Rust Anecdotes & Comparisons](docs/ts_to_rust_anecdotes.md)**: Conceptual comparisons and relatable anecdotes.
-- **[Technical Rust Concepts Guide](docs/rust_concepts.md)**: Deep dive into Ownership, Lifetimes, and more.
+- **[My TypeScript to Rust Journey](docs/learning/ts_to_rust_anecdotes.md)**: Conceptual comparisons and relatable anecdotes.
+- **[My Rust Learning Notes: Concepts in Jack-Do](docs/learning/rust_concepts.md)**: Deep dive into Ownership, Lifetimes, and more.

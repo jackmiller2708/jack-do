@@ -1,5 +1,8 @@
 # My TypeScript to Rust Journey
 
+> [!IMPORTANT]
+> **Personal Learning Notes**: This document contains my personal findings and "Aha!" moments while learning Rust. It is not an official Rust guide or standard learning material. For official documentation, please visit [doc.rust-lang.org](https://doc.rust-lang.org).
+
 Building `jack-do` as my first real Rust project has been quite an adventure. Coming from a TypeScript background, I had to unlearn a few things and embrace new ways of thinking. These are the anecdotes and comparisons that helped me finally "get" Rust.
 
 For a deeper technical dive into my notes, see my [Technical Rust Learning Guide](rust_concepts.md).
