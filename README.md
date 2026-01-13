@@ -19,21 +19,25 @@ jack-do typescript remove-unused-declarations "src/**/*.ts"
 
 ## Installation
 
-### Windows (Quick Install)
-Run the following command in PowerShell to build and install `jack-do` to your system's PATH:
+`jack-do` provides robust installation scripts that automate building, directory setup, and PATH configuration while checking for necessary dependencies.
+
+### Windows (PowerShell)
+Run the following command to install `jack-do` to `$HOME\.jack-do\bin`:
 
 ```powershell
-.\scripts\install.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\install.ps1
 ```
 
-### Manual Installation
+### Unix-like (Linux/macOS)
+Run the following script to install `jack-do` to `$HOME/.jack-do/bin`:
 
-1. **Build the project**:
-   ```bash
-   cargo build --release
-   ```
-2. **Add to PATH**:
-   Add the `target/release` directory (or copy the `jack-do.exe` binary to a folder in your PATH).
+```bash
+chmod +x ./scripts/install.sh
+./scripts/install.sh
+```
+
+> [!TIP]
+> Both scripts include built-in recovery: if the installation fails, they will clean up partially installed files to leave your system in a clean state.
 
 ## Development
 
