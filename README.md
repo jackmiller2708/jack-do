@@ -1,6 +1,6 @@
 # Jack-Do 🐦
 
-A powerful developer productivity CLI tool built for speed and precision.
+A developer productivity CLI tool that I'm building as part of my journey to learn and master Rust. It's a place where I experiment with performance, memory safety, and modern CLI design.
 
 ## Features
 
@@ -56,6 +56,6 @@ MIT
 ---
 
 ### Learning Rust? 🦀
-Moving from a TypeScript background? We've got you covered:
+Moving from a TypeScript background? I've got you covered:
 - **[TS to Rust Anecdotes & Comparisons](docs/ts_to_rust_anecdotes.md)**: Conceptual comparisons and relatable anecdotes.
 - **[Technical Rust Concepts Guide](docs/rust_concepts.md)**: Deep dive into Ownership, Lifetimes, and more.
