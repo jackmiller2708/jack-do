@@ -14,8 +14,8 @@ Most CLI tools are either "one-trick ponies" (do one thing well) or "monoliths" 
 When I started research for the TypeScript domain, I looked at the big players.
 
 - **SWC** is the industry standard for transpilation, but its AST can be complex to work with for simple analysis.
-- **OXC** (The Oxidation Compiler) is a newer project focused on performance and *correctness*. 
-- **My Experience**: OXC's "Semantic Model" (which automatically links variables to their usages) felt more intuitive for a "remove unused code" feature. It felt like OXC was designed for *tools like mine*, not just for bundling.
+- **OXC** (The Oxidation Compiler) is a newer project focused on performance and _correctness_.
+- **My Experience**: OXC's "Semantic Model" (which automatically links variables to their usages) felt more intuitive for a "remove unused code" feature. It felt like OXC was designed for _tools like mine_, not just for bundling.
 
 ## The Choice of "Span Removal" vs. "AST Printing"
 
@@ -36,6 +36,7 @@ Many of the design decisions in the `Logic Layer` were actually driven by the Ru
 ## Final Philosophy
 
 My philosophy for `jack-do` is: **Fast, Safe, and Respectful.**
+
 - **Fast**: Use the best Rust parsers (OXC).
 - **Safe**: Leverage Rust's borrow checker.
 - **Respectful**: Don't break the user's formatting or delete their comments.

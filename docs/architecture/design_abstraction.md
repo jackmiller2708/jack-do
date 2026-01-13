@@ -35,9 +35,10 @@ I've organized the CLI into three distinct layers of responsibility:
 
 ## Domain-Command Pattern
 
-The CLI follows a strict hierarchy: `jack-do <domain> <command> <glob>`. 
+The CLI follows a strict hierarchy: `jack-do <domain> <command> <glob>`.
 
 ### Why this abstraction?
+
 1. **Discoverability**: Running `jack-do typescript --help` only shows TypeScript commands, keeping the interface clean.
 2. **Isolation**: Logic for `typescript` lives in its own module, isolated from `rust`, `css`, or other future domains.
 3. **Consistency**: Every domain follows the same pattern, making it easy to predict where code lives.
