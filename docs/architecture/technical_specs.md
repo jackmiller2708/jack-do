@@ -41,6 +41,13 @@ Instead of re-printing the entire AST (which often loses original formatting/com
 - I remove these spans from the original source string.
 - This preserves the user's styling, comments, and whitespace in the rest of the file.
 
+### 4. Modularity & Responsibility
+
+To maintain long-term correctness, I've split the engine into cohesive modules:
+
+- **`analyzer.rs`**: Pure AST analysis. It identifies _what_ is unused without worrying about how to remove it.
+- **`modifier.rs`**: Safe source-code manipulation. It handles the nuances of commas and whitespace during removal.
+
 ## Performance Considerations
 
 - **Memory Safety**: By leveraging Rust's ownership model, `jack-do` processes files with zero risk of memory leaks or data races.

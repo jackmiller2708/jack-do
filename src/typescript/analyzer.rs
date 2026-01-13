@@ -1,76 +1,16 @@
-use anyhow::{Context, Result};
-use glob::glob;
-use std::fs;
-use std::path::Path;
-use tracing::{info, warn};
-
-use oxc_allocator::Allocator;
 use oxc_ast::AstKind;
-use oxc_parser::{Parser, ParserReturn};
-use oxc_semantic::SemanticBuilder;
-use oxc_span::{GetSpan, SourceType};
+use oxc_semantic::{NodeId, Semantic, SymbolId};
+use oxc_span::{GetSpan, Span};
+use std::collections::HashSet;
 
-pub async fn remove_unused_declarations(pattern: &str) -> Result<()> {
-    info!("Removing unused declarations for pattern: {}", pattern);
-
-    for entry in glob(pattern)? {
-        match entry {
-            Ok(path) => {
-                info!("Processing file: {:?}", path.display());
-
-                if let Err(e) = process_file(&path).await {
-                    warn!("Failed to process file {:?}: {:?}", path, e);
-                }
-            }
-            Err(e) => anyhow::bail!("Error reading glob entry: {:?}", e),
-        }
-    }
-
-    Ok(())
-}
-
-async fn process_file(path: &Path) -> Result<()> {
-    let source_text =
-        fs::read_to_string(path).with_context(|| format!("Failed to read file {:?}", path))?;
-
-    let allocator = Allocator::default();
-    let source_type = SourceType::from_path(path).unwrap_or_default();
-
-    let ParserReturn {
-        program, errors, ..
-    } = Parser::new(&allocator, &source_text, source_type).parse();
-
-    if !errors.is_empty() {
-        for error in errors {
-            warn!("Parse error in {:?}: {:?}", path, error);
-        }
-
-        return Ok(());
-    }
-
-    let semantic_ret = SemanticBuilder::new().build(&program);
-    let semantic = semantic_ret.semantic;
-
-    let analyzer = UnusedDeclarationAnalyzer::new(&semantic);
-    let unused_spans = analyzer.find_unused_spans();
-
-    if unused_spans.is_empty() {
-        return Ok(());
-    }
-
-    apply_modifications_to_file(path, &source_text, unused_spans)?;
-
-    Ok(())
-}
-
-struct UnusedDeclarationAnalyzer<'a> {
-    semantic: &'a oxc_semantic::Semantic<'a>,
-    unused_symbol_ids: std::collections::HashSet<oxc_semantic::SymbolId>,
+pub(crate) struct UnusedDeclarationAnalyzer<'a> {
+    semantic: &'a Semantic<'a>,
+    unused_symbol_ids: HashSet<SymbolId>,
 }
 
 impl<'a> UnusedDeclarationAnalyzer<'a> {
-    fn new(semantic: &'a oxc_semantic::Semantic<'a>) -> Self {
-        let mut unused_symbol_ids = std::collections::HashSet::new();
+    pub(crate) fn new(semantic: &'a Semantic<'a>) -> Self {
+        let mut unused_symbol_ids = HashSet::new();
 
         for symbol_id in semantic.symbols().symbol_ids() {
             if Self::should_skip_symbol(semantic, symbol_id) {
@@ -90,18 +30,12 @@ impl<'a> UnusedDeclarationAnalyzer<'a> {
         }
     }
 
-    fn should_skip_symbol(
-        semantic: &oxc_semantic::Semantic,
-        symbol_id: oxc_semantic::SymbolId,
-    ) -> bool {
+    fn should_skip_symbol(semantic: &Semantic, symbol_id: SymbolId) -> bool {
         let name = semantic.symbols().get_name(symbol_id);
         name == "arguments" || name == "this"
     }
 
-    fn is_symbol_used(
-        semantic: &oxc_semantic::Semantic,
-        symbol_id: oxc_semantic::SymbolId,
-    ) -> bool {
+    fn is_symbol_used(semantic: &Semantic, symbol_id: SymbolId) -> bool {
         semantic
             .symbols()
             .get_resolved_references(symbol_id)
@@ -109,10 +43,7 @@ impl<'a> UnusedDeclarationAnalyzer<'a> {
             .is_some()
     }
 
-    fn is_symbol_exported(
-        semantic: &oxc_semantic::Semantic,
-        symbol_id: oxc_semantic::SymbolId,
-    ) -> bool {
+    fn is_symbol_exported(semantic: &Semantic, symbol_id: SymbolId) -> bool {
         let node_id = semantic.symbols().get_declaration(symbol_id);
         let mut current_node_id = Some(node_id);
 
@@ -131,8 +62,8 @@ impl<'a> UnusedDeclarationAnalyzer<'a> {
         false
     }
 
-    fn find_unused_spans(&self) -> Vec<oxc_span::Span> {
-        let mut nodes_to_remove = std::collections::HashSet::new();
+    pub(crate) fn find_unused_spans(&self) -> Vec<Span> {
+        let mut nodes_to_remove = HashSet::new();
 
         for &symbol_id in &self.unused_symbol_ids {
             let decl_node_id = self.semantic.symbols().get_declaration(symbol_id);
@@ -179,7 +110,7 @@ impl<'a> UnusedDeclarationAnalyzer<'a> {
         spans
     }
 
-    fn is_entire_variable_declaration_unused(&self, node_id: oxc_semantic::NodeId) -> bool {
+    fn is_entire_variable_declaration_unused(&self, node_id: NodeId) -> bool {
         let node = self.semantic.nodes().get_node(node_id);
 
         if let AstKind::VariableDeclaration(var_decl) = node.kind() {
@@ -209,7 +140,7 @@ impl<'a> UnusedDeclarationAnalyzer<'a> {
         }
     }
 
-    fn is_entire_import_declaration_unused(&self, node_id: oxc_semantic::NodeId) -> bool {
+    fn is_entire_import_declaration_unused(&self, node_id: NodeId) -> bool {
         let node = self.semantic.nodes().get_node(node_id);
 
         if let AstKind::ImportDeclaration(imp_decl) = node.kind() {
@@ -232,87 +163,4 @@ impl<'a> UnusedDeclarationAnalyzer<'a> {
         }
         false
     }
-}
-
-fn apply_modifications_to_file(
-    path: &Path,
-    source: &str,
-    spans: Vec<oxc_span::Span>,
-) -> Result<()> {
-    let mut new_source = source.to_string();
-
-    for span in spans {
-        let (expanded_start, expanded_end) =
-            expand_span_for_removal(&new_source, span.start as usize, span.end as usize);
-
-        new_source.replace_range(expanded_start..expanded_end, "");
-        info!("Removed expanded span {}..{}", expanded_start, expanded_end);
-    }
-
-    fs::write(path, new_source).with_context(|| format!("Failed to write file {:?}", path))?;
-    info!("Updated file: {:?}", path);
-    Ok(())
-}
-
-fn expand_span_for_removal(source: &str, start: usize, end: usize) -> (usize, usize) {
-    let mut s = start;
-    let mut e = end;
-
-    // 1. Try to consume trailing comma and whitespace until newline
-    let mut temp_e = e;
-    let bytes = source.as_bytes();
-
-    while temp_e < bytes.len() {
-        match bytes[temp_e] {
-            b' ' | b'\t' | b'\r' => temp_e += 1,
-            b',' => {
-                temp_e += 1;
-                e = temp_e;
-                // After comma, also consume whitespace until next real char or newline
-                while e < bytes.len()
-                    && (bytes[e] == b' ' || bytes[e] == b'\t' || bytes[e] == b'\r')
-                {
-                    e += 1;
-                }
-                break;
-            }
-            b'\n' => {
-                e = temp_e + 1; // Include newline
-                break;
-            }
-            _ => break,
-        }
-    }
-
-    // 2. If no trailing comma, try leading comma
-    if s == start && e == end {
-        let mut temp_s = s;
-
-        while temp_s > 0 {
-            temp_s -= 1;
-
-            match bytes[temp_s] {
-                b' ' | b'\t' | b'\r' => {}
-                b',' => {
-                    s = temp_s;
-                    break;
-                }
-                _ => break,
-            }
-        }
-    }
-
-    // 3. If it's a whole line (or multiple), consume leading whitespace as well
-    let mut temp_s = s;
-
-    while temp_s > 0 && (bytes[temp_s - 1] == b' ' || bytes[temp_s - 1] == b'\t') {
-        temp_s -= 1;
-    }
-
-    // Only expand if we are at the start of the line or only whitespace precedes
-    if temp_s == 0 || bytes[temp_s - 1] == b'\n' {
-        s = temp_s;
-    }
-
-    (s, e)
 }

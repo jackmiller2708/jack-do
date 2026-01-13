@@ -1,9 +1,8 @@
 mod cli;
-mod domains;
+mod typescript;
 
 use clap::Parser;
 use cli::{Cli, Domain, TypescriptCommand};
-use tracing_subscriber;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -15,7 +14,7 @@ async fn main() -> anyhow::Result<()> {
     match cli.domain {
         Domain::Typescript { command } => match command {
             TypescriptCommand::RemoveUnusedDeclarations { pattern } => {
-                domains::typescript::remove_unused_declarations(&pattern).await?;
+                typescript::remove_unused_declarations(&pattern).await?;
             }
         },
     }

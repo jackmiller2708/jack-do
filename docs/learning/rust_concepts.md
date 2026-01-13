@@ -30,6 +30,7 @@ async fn process_file(path: &Path) -> Result<()> {
 I eventually learned that sometimes I _want_ to give away ownership. I call this the "One-Way Ticket." In `apply_modifications_to_file`, I pass `spans: Vec<Span>` without a `&`.
 
 ```rust
+// Now living in src/typescript/modifier.rs
 fn apply_modifications_to_file(path: &Path, source: &str, spans: Vec<Span>)
 ```
 
@@ -86,7 +87,7 @@ This is the mental checklist I use when deciding between a reference (`&T`) and 
 
 Lifetimes were intimidating at first. I've learned they just ensure that references remain valid as long as they are needed.
 
-### My use in `UnusedDeclarationAnalyzer<'a>`:
+### My use in `UnusedDeclarationAnalyzer<'a>` (src/typescript/analyzer.rs):
 
 ```rust
 struct UnusedDeclarationAnalyzer<'a> {

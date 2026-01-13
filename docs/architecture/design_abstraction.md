@@ -17,19 +17,19 @@ I've organized the CLI into three distinct layers of responsibility:
                     v
 +-------------------+-------------------+
 |             COMMAND LAYER             |
-|                (cli.rs)               |
+|              (src/cli/*)              |
 |  - Defines domains & subcommands      |
 |  - Parses flags and arguments         |
-|  - Handles CLI UX (help text)         |
+|  - Domain-specific CLI definitions    |
 +-------------------+-------------------+
                     |
                     v
 +-------------------+-------------------+
-|              LOGIC LAYER              |
-|           (src/domains/*)             |
-|  - Domain-specific rules (TS, etc.)   |
-|  - High-level business logic          |
-|  - Orchestrates AST transformations   |
+|             DOMAIN LAYER              |
+|           (src/[domain]/*)            |
+|  - Encapsulated business logic        |
+|  - Analysis (analyzer.rs)             |
+|  - Transformation (modifier.rs)       |
 +---------------------------------------+
 ```
 
@@ -39,9 +39,9 @@ The CLI follows a strict hierarchy: `jack-do <domain> <command> <glob>`.
 
 ### Why this abstraction?
 
-1. **Discoverability**: Running `jack-do typescript --help` only shows TypeScript commands, keeping the interface clean.
-2. **Isolation**: Logic for `typescript` lives in its own module, isolated from `rust`, `css`, or other future domains.
-3. **Consistency**: Every domain follows the same pattern, making it easy to predict where code lives.
+1. **Discoverability**: Running `jack-do typescript --help` only shows TypeScript-specific commands.
+2. **Isolation**: Logic for `typescript` lives in `src/typescript/`, completely isolated from other future domains.
+3. **Consistency**: Every domain follows the same `mod.rs` (entry) + submodules pattern.
 
 ```text
 jack-do (CLI Binary)
@@ -61,6 +61,6 @@ Most commands in `jack-do` (especially in the TypeScript domain) follow a standa
 2. **Analysis**: Parse the file into an AST (Abstract Syntax Tree).
 3. **Identification**: Identify spans of code that need modification (e.g., unused symbols).
 4. **Correction**: Apply deletions or updates to the source text based on identified spans.
-5. **Persistence**: Write the modified text back to the disk.
+5. **Persistence**: Write the modified text back to the disk (handled by `modifier.rs`).
 
-This lifecycle is abstracted into the `process_file` function within each domain, ensuring a consistent approach to file manipulation.
+This lifecycle is decomposed into dedicated modules like `analyzer.rs` and `modifier.rs`, ensuring that each part of the tool has a single, clear responsibility.

@@ -26,6 +26,14 @@ A big decision I faced was how to save the modified code.
 
 **I chose Span Removal.** Even though it's harder to get the commas and line breaks right, it respects the developer's original code. I believe a good tool should be invisible; it should fix the problem without leaving a mess of reformatted code behind.
 
+## The Domain-Driven Refactor: Split by Responsibility
+
+As the TypeScript logic grew, I realized that a single `typescript.rs` file was becoming a "monolith." I decided to refactor it into a domain-driven structure.
+
+- **The Principle**: I shifted from "layer-based" thinking to "domain-based" thinking. Instead of having a generic `domains/` folder, each domain is now its own package-like directory (`src/typescript/`).
+- **Cohesion over Layering**: Inside the domain, I split logic by responsibility. AST analysis (the "brain") moved to `analyzer.rs`, while file modification (the "hands") moved to `modifier.rs`.
+- **Minimized Surface Area**: I made heavy use of `pub(crate)` to ensure that internal helper functions and structs aren't exposed unnecessarily. This makes the codebase much easier to reason about—if it's not `pub`, it can't leak.
+
 ## Learning from Rust's Strictness
 
 Many of the design decisions in the `Logic Layer` were actually driven by the Rust compiler.
